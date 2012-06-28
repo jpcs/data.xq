@@ -93,7 +93,7 @@ Another example of an XML description is:
 
 ### <a name="func_type_1"/> type\#1
 ```xquery
-type($v
+type($v as item()
 ) as  element()
 ```
  
@@ -105,7 +105,7 @@ type($v
 
 #### Params
 
-* $v: A value, which must have been created by this library.
+* $v as  item(): A value, which must have been created by this library.
 
 
 #### Returns
@@ -117,7 +117,7 @@ describe($v
 ) as  xs:string
 ```
  
- Returns a string serialization of the structure of the value. Non-algebraic
+ Returns a string serialization of the structure of the values. Non-algebraic
  types are serialized using the fn:string() function.
 
  
@@ -125,15 +125,17 @@ describe($v
 
 #### Params
 
-* $v: A value, which must have been created by this library.
+* $v: A sequence of values, which must have been created by this library.
 
 
 #### Returns
-*  xs:string: The serialization of this value.
+*  xs:string: The serialization of the values.
 
 ### <a name="func_match_2"/> match\#2
 ```xquery
-match($v,$f1
+match(
+  $v as item(),
+  $f1 as function(*)
 )
 ```
  
@@ -148,14 +150,17 @@ match($v,$f1
 
 #### Params
 
-* $v: A value, which must have been created by this library.
+* $v as  item(): A value, which must have been created by this library.
 
-* $f1: A function, which is called with the values from the first sub-type of the type.
+* $f1 as  function(\*): A function, which is called with the values from the first sub-type of the type.
 
 
 ### <a name="func_match_3"/> match\#3
 ```xquery
-match($v,$f1,$f2
+match(
+  $v as item(),
+  $f1 as function(*),
+  $f2 as function(*)
 )
 ```
  
@@ -170,16 +175,20 @@ match($v,$f1,$f2
 
 #### Params
 
-* $v: A value, which must have been created by this library.
+* $v as  item(): A value, which must have been created by this library.
 
-* $f1: A function, which is called with the values from the first sub-type of the type.
+* $f1 as  function(\*): A function, which is called with the values from the first sub-type of the type.
 
-* $f2: A function, which is called with the values from the second sub-type of the type.
+* $f2 as  function(\*): A function, which is called with the values from the second sub-type of the type.
 
 
 ### <a name="func_match_4"/> match\#4
 ```xquery
-match($v,$f1,$f2,$f3
+match(
+  $v as item(),
+  $f1 as function(*),
+  $f2 as function(*),
+  $f3 as function(*)
 )
 ```
  
@@ -194,18 +203,23 @@ match($v,$f1,$f2,$f3
 
 #### Params
 
-* $v: A value, which must have been created by this library.
+* $v as  item(): A value, which must have been created by this library.
 
-* $f1: A function, which is called with the values from the first sub-type of the type.
+* $f1 as  function(\*): A function, which is called with the values from the first sub-type of the type.
 
-* $f2: A function, which is called with the values from the second sub-type of the type.
+* $f2 as  function(\*): A function, which is called with the values from the second sub-type of the type.
 
-* $f3: A function, which is called with the values from the third sub-type of the type.
+* $f3 as  function(\*): A function, which is called with the values from the third sub-type of the type.
 
 
 ### <a name="func_match_5"/> match\#5
 ```xquery
-match($v,$f1,$f2,$f3,$f4
+match(
+  $v as item(),
+  $f1 as function(*),
+  $f2 as function(*),
+  $f3 as function(*),
+  $f4 as function(*)
 )
 ```
  
@@ -220,20 +234,26 @@ match($v,$f1,$f2,$f3,$f4
 
 #### Params
 
-* $v: A value, which must have been created by this library.
+* $v as  item(): A value, which must have been created by this library.
 
-* $f1: A function, which is called with the values from the first sub-type of the type.
+* $f1 as  function(\*): A function, which is called with the values from the first sub-type of the type.
 
-* $f2: A function, which is called with the values from the second sub-type of the type.
+* $f2 as  function(\*): A function, which is called with the values from the second sub-type of the type.
 
-* $f3: A function, which is called with the values from the third sub-type of the type.
+* $f3 as  function(\*): A function, which is called with the values from the third sub-type of the type.
 
-* $f4: A function, which is called with the values from the fourth sub-type of the type.
+* $f4 as  function(\*): A function, which is called with the values from the fourth sub-type of the type.
 
 
 ### <a name="func_match_6"/> match\#6
 ```xquery
-match($v,$f1,$f2,$f3,$f4,$f5
+match(
+  $v as item(),
+  $f1 as function(*),
+  $f2 as function(*),
+  $f3 as function(*),
+  $f4 as function(*),
+  $f5 as function(*)
 )
 ```
  
@@ -248,22 +268,29 @@ match($v,$f1,$f2,$f3,$f4,$f5
 
 #### Params
 
-* $v: A value, which must have been created by this library.
+* $v as  item(): A value, which must have been created by this library.
 
-* $f1: A function, which is called with the values from the first sub-type of the type.
+* $f1 as  function(\*): A function, which is called with the values from the first sub-type of the type.
 
-* $f2: A function, which is called with the values from the second sub-type of the type.
+* $f2 as  function(\*): A function, which is called with the values from the second sub-type of the type.
 
-* $f3: A function, which is called with the values from the third sub-type of the type.
+* $f3 as  function(\*): A function, which is called with the values from the third sub-type of the type.
 
-* $f4: A function, which is called with the values from the fourth sub-type of the type.
+* $f4 as  function(\*): A function, which is called with the values from the fourth sub-type of the type.
 
-* $f5: A function, which is called with the values from the fifth sub-type of the type.
+* $f5 as  function(\*): A function, which is called with the values from the fifth sub-type of the type.
 
 
 ### <a name="func_match_7"/> match\#7
 ```xquery
-match($v,$f1,$f2,$f3,$f4,$f5,$f6
+match(
+  $v as item(),
+  $f1 as function(*),
+  $f2 as function(*),
+  $f3 as function(*),
+  $f4 as function(*),
+  $f5 as function(*),
+  $f6 as function(*)
 )
 ```
  
@@ -278,24 +305,32 @@ match($v,$f1,$f2,$f3,$f4,$f5,$f6
 
 #### Params
 
-* $v: A value, which must have been created by this library.
+* $v as  item(): A value, which must have been created by this library.
 
-* $f1: A function, which is called with the values from the first sub-type of the type.
+* $f1 as  function(\*): A function, which is called with the values from the first sub-type of the type.
 
-* $f2: A function, which is called with the values from the second sub-type of the type.
+* $f2 as  function(\*): A function, which is called with the values from the second sub-type of the type.
 
-* $f3: A function, which is called with the values from the third sub-type of the type.
+* $f3 as  function(\*): A function, which is called with the values from the third sub-type of the type.
 
-* $f4: A function, which is called with the values from the fourth sub-type of the type.
+* $f4 as  function(\*): A function, which is called with the values from the fourth sub-type of the type.
 
-* $f5: A function, which is called with the values from the fifth sub-type of the type.
+* $f5 as  function(\*): A function, which is called with the values from the fifth sub-type of the type.
 
-* $f6: A function, which is called with the values from the sixth sub-type of the type.
+* $f6 as  function(\*): A function, which is called with the values from the sixth sub-type of the type.
 
 
 ### <a name="func_match_8"/> match\#8
 ```xquery
-match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7
+match(
+  $v as item(),
+  $f1 as function(*),
+  $f2 as function(*),
+  $f3 as function(*),
+  $f4 as function(*),
+  $f5 as function(*),
+  $f6 as function(*),
+  $f7 as function(*)
 )
 ```
  
@@ -310,26 +345,35 @@ match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7
 
 #### Params
 
-* $v: A value, which must have been created by this library.
+* $v as  item(): A value, which must have been created by this library.
 
-* $f1: A function, which is called with the values from the first sub-type of the type.
+* $f1 as  function(\*): A function, which is called with the values from the first sub-type of the type.
 
-* $f2: A function, which is called with the values from the second sub-type of the type.
+* $f2 as  function(\*): A function, which is called with the values from the second sub-type of the type.
 
-* $f3: A function, which is called with the values from the third sub-type of the type.
+* $f3 as  function(\*): A function, which is called with the values from the third sub-type of the type.
 
-* $f4: A function, which is called with the values from the fourth sub-type of the type.
+* $f4 as  function(\*): A function, which is called with the values from the fourth sub-type of the type.
 
-* $f5: A function, which is called with the values from the fifth sub-type of the type.
+* $f5 as  function(\*): A function, which is called with the values from the fifth sub-type of the type.
 
-* $f6: A function, which is called with the values from the sixth sub-type of the type.
+* $f6 as  function(\*): A function, which is called with the values from the sixth sub-type of the type.
 
-* $f7: A function, which is called with the values from the seventh sub-type of the type.
+* $f7 as  function(\*): A function, which is called with the values from the seventh sub-type of the type.
 
 
 ### <a name="func_match_9"/> match\#9
 ```xquery
-match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8
+match(
+  $v as item(),
+  $f1 as function(*),
+  $f2 as function(*),
+  $f3 as function(*),
+  $f4 as function(*),
+  $f5 as function(*),
+  $f6 as function(*),
+  $f7 as function(*),
+  $f8 as function(*)
 )
 ```
  
@@ -344,28 +388,38 @@ match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8
 
 #### Params
 
-* $v: A value, which must have been created by this library.
+* $v as  item(): A value, which must have been created by this library.
 
-* $f1: A function, which is called with the values from the first sub-type of the type.
+* $f1 as  function(\*): A function, which is called with the values from the first sub-type of the type.
 
-* $f2: A function, which is called with the values from the second sub-type of the type.
+* $f2 as  function(\*): A function, which is called with the values from the second sub-type of the type.
 
-* $f3: A function, which is called with the values from the third sub-type of the type.
+* $f3 as  function(\*): A function, which is called with the values from the third sub-type of the type.
 
-* $f4: A function, which is called with the values from the fourth sub-type of the type.
+* $f4 as  function(\*): A function, which is called with the values from the fourth sub-type of the type.
 
-* $f5: A function, which is called with the values from the fifth sub-type of the type.
+* $f5 as  function(\*): A function, which is called with the values from the fifth sub-type of the type.
 
-* $f6: A function, which is called with the values from the sixth sub-type of the type.
+* $f6 as  function(\*): A function, which is called with the values from the sixth sub-type of the type.
 
-* $f7: A function, which is called with the values from the seventh sub-type of the type.
+* $f7 as  function(\*): A function, which is called with the values from the seventh sub-type of the type.
 
-* $f8: A function, which is called with the values from the eighth sub-type of the type.
+* $f8 as  function(\*): A function, which is called with the values from the eighth sub-type of the type.
 
 
 ### <a name="func_match_10"/> match\#10
 ```xquery
-match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8,$f9
+match(
+  $v as item(),
+  $f1 as function(*),
+  $f2 as function(*),
+  $f3 as function(*),
+  $f4 as function(*),
+  $f5 as function(*),
+  $f6 as function(*),
+  $f7 as function(*),
+  $f8 as function(*),
+  $f9 as function(*)
 )
 ```
  
@@ -380,30 +434,41 @@ match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8,$f9
 
 #### Params
 
-* $v: A value, which must have been created by this library.
+* $v as  item(): A value, which must have been created by this library.
 
-* $f1: A function, which is called with the values from the first sub-type of the type.
+* $f1 as  function(\*): A function, which is called with the values from the first sub-type of the type.
 
-* $f2: A function, which is called with the values from the second sub-type of the type.
+* $f2 as  function(\*): A function, which is called with the values from the second sub-type of the type.
 
-* $f3: A function, which is called with the values from the third sub-type of the type.
+* $f3 as  function(\*): A function, which is called with the values from the third sub-type of the type.
 
-* $f4: A function, which is called with the values from the fourth sub-type of the type.
+* $f4 as  function(\*): A function, which is called with the values from the fourth sub-type of the type.
 
-* $f5: A function, which is called with the values from the fifth sub-type of the type.
+* $f5 as  function(\*): A function, which is called with the values from the fifth sub-type of the type.
 
-* $f6: A function, which is called with the values from the sixth sub-type of the type.
+* $f6 as  function(\*): A function, which is called with the values from the sixth sub-type of the type.
 
-* $f7: A function, which is called with the values from the seventh sub-type of the type.
+* $f7 as  function(\*): A function, which is called with the values from the seventh sub-type of the type.
 
-* $f8: A function, which is called with the values from the eighth sub-type of the type.
+* $f8 as  function(\*): A function, which is called with the values from the eighth sub-type of the type.
 
-* $f9: A function, which is called with the values from the ninth sub-type of the type.
+* $f9 as  function(\*): A function, which is called with the values from the ninth sub-type of the type.
 
 
 ### <a name="func_match_11"/> match\#11
 ```xquery
-match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8,$f9,$f10
+match(
+  $v as item(),
+  $f1 as function(*),
+  $f2 as function(*),
+  $f3 as function(*),
+  $f4 as function(*),
+  $f5 as function(*),
+  $f6 as function(*),
+  $f7 as function(*),
+  $f8 as function(*),
+  $f9 as function(*),
+  $f10 as function(*)
 )
 ```
  
@@ -418,27 +483,27 @@ match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8,$f9,$f10
 
 #### Params
 
-* $v: A value, which must have been created by this library.
+* $v as  item(): A value, which must have been created by this library.
 
-* $f1: A function, which is called with the values from the first sub-type of the type.0: A function, which is called with the values from the tenth sub-type of the type.
+* $f1 as  function(\*): A function, which is called with the values from the first sub-type of the type.0: A function, which is called with the values from the tenth sub-type of the type.
 
-* $f2: A function, which is called with the values from the second sub-type of the type.
+* $f2 as  function(\*): A function, which is called with the values from the second sub-type of the type.
 
-* $f3: A function, which is called with the values from the third sub-type of the type.
+* $f3 as  function(\*): A function, which is called with the values from the third sub-type of the type.
 
-* $f4: A function, which is called with the values from the fourth sub-type of the type.
+* $f4 as  function(\*): A function, which is called with the values from the fourth sub-type of the type.
 
-* $f5: A function, which is called with the values from the fifth sub-type of the type.
+* $f5 as  function(\*): A function, which is called with the values from the fifth sub-type of the type.
 
-* $f6: A function, which is called with the values from the sixth sub-type of the type.
+* $f6 as  function(\*): A function, which is called with the values from the sixth sub-type of the type.
 
-* $f7: A function, which is called with the values from the seventh sub-type of the type.
+* $f7 as  function(\*): A function, which is called with the values from the seventh sub-type of the type.
 
-* $f8: A function, which is called with the values from the eighth sub-type of the type.
+* $f8 as  function(\*): A function, which is called with the values from the eighth sub-type of the type.
 
-* $f9: A function, which is called with the values from the ninth sub-type of the type.
+* $f9 as  function(\*): A function, which is called with the values from the ninth sub-type of the type.
 
-* $f10: A function, which is called with the values from the tenth sub-type of the type.
+* $f10 as  function(\*): A function, which is called with the values from the tenth sub-type of the type.
 
 
 

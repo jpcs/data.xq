@@ -26,18 +26,18 @@ declare variable $maybe := data:declare(
 
 declare function local:from-maybe($default,$maybe)
 {
-  data:match($maybe,(
+  data:match($maybe,
     (: Nothing :) function() { $default },
     (: Just :) function($v) { $v }
-  ))
+  )
 };
 
 declare function local:cat-maybes($maybes)
 {
-  $maybes ! data:match(.,(
+  $maybes ! data:match(.,
     (: Nothing :) function() { () },
     (: Just :) function($v) { $v }
-  ))
+  )
 };
 
 let $data := ($maybe[1](), $maybe[2]("foo"), $maybe[1](), $maybe[2](99))

@@ -106,7 +106,7 @@ declare %private function type-check($entry,$position,$value)
     fn:string(fn:node-name($type)) || fn:string($type/@occurrence))
 };
 
-declare %private function construct($entry,$position,$total)
+declare %private function construct($entry,$position,$total) as item()
 {
   function($functions) {
     if(fn:empty($functions)) then $entry
@@ -117,7 +117,7 @@ declare %private function construct($entry,$position,$total)
   }
 };
 
-declare %private function construct($entry,$position,$total,$v1)
+declare %private function construct($entry,$position,$total,$v1) as item()
 {
   type-check($entry,1,$v1),
   function($functions) {
@@ -129,7 +129,7 @@ declare %private function construct($entry,$position,$total,$v1)
   }
 };
 
-declare %private function construct($entry,$position,$total,$v1,$v2)
+declare %private function construct($entry,$position,$total,$v1,$v2) as item()
 {
   type-check($entry,1,$v1),
   type-check($entry,2,$v2),
@@ -142,7 +142,7 @@ declare %private function construct($entry,$position,$total,$v1,$v2)
   }
 };
 
-declare %private function construct($entry,$position,$total,$v1,$v2,$v3)
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3) as item()
 {
   type-check($entry,1,$v1),
   type-check($entry,2,$v2),
@@ -156,7 +156,7 @@ declare %private function construct($entry,$position,$total,$v1,$v2,$v3)
   }
 };
 
-declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4)
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4) as item()
 {
   type-check($entry,1,$v1),
   type-check($entry,2,$v2),
@@ -171,7 +171,7 @@ declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4)
   }
 };
 
-declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5)
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5) as item()
 {
   type-check($entry,1,$v1),
   type-check($entry,2,$v2),
@@ -187,7 +187,7 @@ declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5)
   }
 };
 
-declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6)
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6) as item()
 {
   type-check($entry,1,$v1),
   type-check($entry,2,$v2),
@@ -204,7 +204,7 @@ declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,
   }
 };
 
-declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7)
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7) as item()
 {
   type-check($entry,1,$v1),
   type-check($entry,2,$v2),
@@ -222,7 +222,7 @@ declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,
   }
 };
 
-declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8)
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8) as item()
 {
   type-check($entry,1,$v1),
   type-check($entry,2,$v2),
@@ -241,7 +241,7 @@ declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,
   }
 };
 
-declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9)
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9) as item()
 {
   type-check($entry,1,$v1),
   type-check($entry,2,$v2),
@@ -261,7 +261,7 @@ declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,
   }
 };
 
-declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9,$v10)
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9,$v10) as item()
 {
   type-check($entry,1,$v1),
   type-check($entry,2,$v2),
@@ -290,7 +290,7 @@ declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,
  : 
  : @return The description element representing the type of the value.
  :)
-declare function type($v) as element()
+declare function type($v as item()) as element()
 {
   $v(())
 };
@@ -301,12 +301,12 @@ declare %private function newline($indent)
 };
 
 (:~ 
- : Returns a string serialization of the structure of the value. Non-algebraic
+ : Returns a string serialization of the structure of the values. Non-algebraic
  : types are serialized using the fn:string() function.
  :
- : @param $v: A value, which must have been created by this library.
+ : @param $v: A sequence of values, which must have been created by this library.
  : 
- : @return The serialization of this value.
+ : @return The serialization of the values.
  :)
 declare function describe($v) as xs:string
 {
@@ -466,7 +466,9 @@ declare %private function describe-many($entry, $indent, $v1, $v2, $v3, $v4, $v5
  : 
  : @return The result of the function called.
  :)
-declare function match($v,$f1)
+declare function match(
+  $v as item(),
+  $f1 as function(*))
 {
   $v($f1)
 };
@@ -484,7 +486,10 @@ declare function match($v,$f1)
  : 
  : @return The result of the function called.
  :)
-declare function match($v,$f1,$f2)
+declare function match(
+  $v as item(),
+  $f1 as function(*),
+  $f2 as function(*))
 {
   $v(($f1,$f2))
 };
@@ -503,7 +508,11 @@ declare function match($v,$f1,$f2)
  : 
  : @return The result of the function called.
  :)
-declare function match($v,$f1,$f2,$f3)
+declare function match(
+  $v as item(),
+  $f1 as function(*),
+  $f2 as function(*),
+  $f3 as function(*))
 {
   $v(($f1,$f2,$f3))
 };
@@ -523,7 +532,12 @@ declare function match($v,$f1,$f2,$f3)
  : 
  : @return The result of the function called.
  :)
-declare function match($v,$f1,$f2,$f3,$f4)
+declare function match(
+  $v as item(),
+  $f1 as function(*),
+  $f2 as function(*),
+  $f3 as function(*),
+  $f4 as function(*))
 {
   $v(($f1,$f2,$f3,$f4))
 };
@@ -544,7 +558,13 @@ declare function match($v,$f1,$f2,$f3,$f4)
  : 
  : @return The result of the function called.
  :)
-declare function match($v,$f1,$f2,$f3,$f4,$f5)
+declare function match(
+  $v as item(),
+  $f1 as function(*),
+  $f2 as function(*),
+  $f3 as function(*),
+  $f4 as function(*),
+  $f5 as function(*))
 {
   $v(($f1,$f2,$f3,$f4,$f5))
 };
@@ -566,7 +586,14 @@ declare function match($v,$f1,$f2,$f3,$f4,$f5)
  : 
  : @return The result of the function called.
  :)
-declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6)
+declare function match(
+  $v as item(),
+  $f1 as function(*),
+  $f2 as function(*),
+  $f3 as function(*),
+  $f4 as function(*),
+  $f5 as function(*),
+  $f6 as function(*))
 {
   $v(($f1,$f2,$f3,$f4,$f5,$f6))
 };
@@ -589,7 +616,15 @@ declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6)
  : 
  : @return The result of the function called.
  :)
-declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7)
+declare function match(
+  $v as item(),
+  $f1 as function(*),
+  $f2 as function(*),
+  $f3 as function(*),
+  $f4 as function(*),
+  $f5 as function(*),
+  $f6 as function(*),
+  $f7 as function(*))
 {
   $v(($f1,$f2,$f3,$f4,$f5,$f6,$f7))
 };
@@ -613,7 +648,16 @@ declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7)
  : 
  : @return The result of the function called.
  :)
-declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8)
+declare function match(
+  $v as item(),
+  $f1 as function(*),
+  $f2 as function(*),
+  $f3 as function(*),
+  $f4 as function(*),
+  $f5 as function(*),
+  $f6 as function(*),
+  $f7 as function(*),
+  $f8 as function(*))
 {
   $v(($f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8))
 };
@@ -638,7 +682,17 @@ declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8)
  : 
  : @return The result of the function called.
  :)
-declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8,$f9)
+declare function match(
+  $v as item(),
+  $f1 as function(*),
+  $f2 as function(*),
+  $f3 as function(*),
+  $f4 as function(*),
+  $f5 as function(*),
+  $f6 as function(*),
+  $f7 as function(*),
+  $f8 as function(*),
+  $f9 as function(*))
 {
   $v(($f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8,$f9))
 };
@@ -664,7 +718,18 @@ declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8,$f9)
  : 
  : @return The result of the function called.
  :)
-declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8,$f9,$f10)
+declare function match(
+  $v as item(),
+  $f1 as function(*),
+  $f2 as function(*),
+  $f3 as function(*),
+  $f4 as function(*),
+  $f5 as function(*),
+  $f6 as function(*),
+  $f7 as function(*),
+  $f8 as function(*),
+  $f9 as function(*),
+  $f10 as function(*))
 {
   $v(($f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8,$f9,$f10))
 };
