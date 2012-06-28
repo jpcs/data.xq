@@ -16,10 +16,58 @@ xquery version "3.0";
  : limitations under the License.
  :)
 
+(:~ 
+ : <h1>data.xq</h1>
+ : <p>An XQuery 3.0 library for defining algebraic data types, and performing
+ : structural pattern matching on them. This can be used to define complex
+ : data structures and the operations on them.</p>
+ : 
+ :  @author John Snelson
+ :  @since June 28, 2012
+ :  @version 0.1
+ :)
 module namespace data = "http://snelson.org.uk/functions/data";
 declare default function namespace "http://snelson.org.uk/functions/data";
 
-declare function declare($decl)
+(:~ 
+ : Returns a sequence of constructor functions for the XML type
+ : description passed in as an argument. One constructor function is
+ : returned for each of the sub-types described. The constructor functions
+ : can be called to construct an instance of the type, passing in the
+ : values required the specific sub-type being created.
+ :
+ : <p>An example of an XML description is:
+ : <code>
+ : &lt;Maybe>
+ :   &lt;Nothing/>
+ :   &lt;Just>&lt;data:Sequence/>&lt;/Just>
+ : &lt;/Maybe>
+ : </code>
+ : This defines a type named "Maybe", with two sub-types named "Nothing" and
+ : "Just". The "Nothing" constructor function takes no arguments, and store no
+ : additional data. The "Just" constructor function takes a single argument which
+ : is an arbitrary sequence. Passing this type description to this function will
+ : return two constructor functions, one for each sub-type.
+ : </p>
+ :
+ : <p>Another example of an XML description is:
+ : <code>
+ : &lt;Tree>
+ :   &lt;Empty/>
+ :   &lt;Leaf>&lt;data:Sequence/>&lt;/Leaf>
+ :   &lt;Node>&lt;Tree/>&lt;Tree/>&lt;/Node>
+ : &lt;/Tree>
+ : </code>
+ : This defines a type named "Tree", with three sub-types named "Empty",
+ : "Leaf", and "Node". The "Node" constructor function takes two arguments,
+ : each of which will be type checked as a "Tree" object during construction.
+ : </p>
+ :
+ : @param $decl: An XML description of an algebraic data type.
+ : 
+ : @return A sequence of constructor functions for the given algebraic type description.
+ :)
+declare function declare($decl as element()) as function(*)*
 {
   let $total := fn:count($decl/*)
   for $entry at $position in $decl/*
@@ -234,7 +282,15 @@ declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,
   }
 };
 
-declare function type($v)
+(:~ 
+ : Returns the type of the value - that is, the child node in the
+ : XML type description that represents this value.
+ :
+ : @param $v: A value, which must have been created by this library.
+ : 
+ : @return The description element representing the type of the value.
+ :)
+declare function type($v) as element()
 {
   $v(())
 };
@@ -244,7 +300,15 @@ declare %private function newline($indent)
   "&#xa;" || fn:string-join(((1 to $indent) ! "  "))
 };
 
-declare function describe($v)
+(:~ 
+ : Returns a string serialization of the structure of the value. Non-algebraic
+ : types are serialized using the fn:string() function.
+ :
+ : @param $v: A value, which must have been created by this library.
+ : 
+ : @return The serialization of this value.
+ :)
+declare function describe($v) as xs:string
 {
   describe-data(0,$v)
 };
@@ -390,51 +454,216 @@ declare %private function describe-many($entry, $indent, $v1, $v2, $v3, $v4, $v5
   newline($indent) || describe-type($entry,10,$indent,$v10)
 };
 
+(:~ 
+ : Performs structural pattern matching against the value. The pattern matching
+ : works by calling the function passed in in the same position as the sub-type
+ : of the value. Therefore the number of functions passed in as arguments must equal
+ : the number of sub-types of the value, and each function should have the same arity
+ : as its corresponding sub-type contains values.
+ :
+ : @param $v: A value, which must have been created by this library.
+ : @param $f1: A function, which is called with the values from the first sub-type of the type.
+ : 
+ : @return The result of the function called.
+ :)
 declare function match($v,$f1)
 {
   $v($f1)
 };
 
+(:~ 
+ : Performs structural pattern matching against the value. The pattern matching
+ : works by calling the function passed in in the same position as the sub-type
+ : of the value. Therefore the number of functions passed in as arguments must equal
+ : the number of sub-types of the value, and each function should have the same arity
+ : as its corresponding sub-type contains values.
+ :
+ : @param $v: A value, which must have been created by this library.
+ : @param $f1: A function, which is called with the values from the first sub-type of the type.
+ : @param $f2: A function, which is called with the values from the second sub-type of the type.
+ : 
+ : @return The result of the function called.
+ :)
 declare function match($v,$f1,$f2)
 {
   $v(($f1,$f2))
 };
 
+(:~ 
+ : Performs structural pattern matching against the value. The pattern matching
+ : works by calling the function passed in in the same position as the sub-type
+ : of the value. Therefore the number of functions passed in as arguments must equal
+ : the number of sub-types of the value, and each function should have the same arity
+ : as its corresponding sub-type contains values.
+ :
+ : @param $v: A value, which must have been created by this library.
+ : @param $f1: A function, which is called with the values from the first sub-type of the type.
+ : @param $f2: A function, which is called with the values from the second sub-type of the type.
+ : @param $f3: A function, which is called with the values from the third sub-type of the type.
+ : 
+ : @return The result of the function called.
+ :)
 declare function match($v,$f1,$f2,$f3)
 {
   $v(($f1,$f2,$f3))
 };
 
+(:~ 
+ : Performs structural pattern matching against the value. The pattern matching
+ : works by calling the function passed in in the same position as the sub-type
+ : of the value. Therefore the number of functions passed in as arguments must equal
+ : the number of sub-types of the value, and each function should have the same arity
+ : as its corresponding sub-type contains values.
+ :
+ : @param $v: A value, which must have been created by this library.
+ : @param $f1: A function, which is called with the values from the first sub-type of the type.
+ : @param $f2: A function, which is called with the values from the second sub-type of the type.
+ : @param $f3: A function, which is called with the values from the third sub-type of the type.
+ : @param $f4: A function, which is called with the values from the fourth sub-type of the type.
+ : 
+ : @return The result of the function called.
+ :)
 declare function match($v,$f1,$f2,$f3,$f4)
 {
   $v(($f1,$f2,$f3,$f4))
 };
 
+(:~ 
+ : Performs structural pattern matching against the value. The pattern matching
+ : works by calling the function passed in in the same position as the sub-type
+ : of the value. Therefore the number of functions passed in as arguments must equal
+ : the number of sub-types of the value, and each function should have the same arity
+ : as its corresponding sub-type contains values.
+ :
+ : @param $v: A value, which must have been created by this library.
+ : @param $f1: A function, which is called with the values from the first sub-type of the type.
+ : @param $f2: A function, which is called with the values from the second sub-type of the type.
+ : @param $f3: A function, which is called with the values from the third sub-type of the type.
+ : @param $f4: A function, which is called with the values from the fourth sub-type of the type.
+ : @param $f5: A function, which is called with the values from the fifth sub-type of the type.
+ : 
+ : @return The result of the function called.
+ :)
 declare function match($v,$f1,$f2,$f3,$f4,$f5)
 {
   $v(($f1,$f2,$f3,$f4,$f5))
 };
 
+(:~ 
+ : Performs structural pattern matching against the value. The pattern matching
+ : works by calling the function passed in in the same position as the sub-type
+ : of the value. Therefore the number of functions passed in as arguments must equal
+ : the number of sub-types of the value, and each function should have the same arity
+ : as its corresponding sub-type contains values.
+ :
+ : @param $v: A value, which must have been created by this library.
+ : @param $f1: A function, which is called with the values from the first sub-type of the type.
+ : @param $f2: A function, which is called with the values from the second sub-type of the type.
+ : @param $f3: A function, which is called with the values from the third sub-type of the type.
+ : @param $f4: A function, which is called with the values from the fourth sub-type of the type.
+ : @param $f5: A function, which is called with the values from the fifth sub-type of the type.
+ : @param $f6: A function, which is called with the values from the sixth sub-type of the type.
+ : 
+ : @return The result of the function called.
+ :)
 declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6)
 {
   $v(($f1,$f2,$f3,$f4,$f5,$f6))
 };
 
+(:~ 
+ : Performs structural pattern matching against the value. The pattern matching
+ : works by calling the function passed in in the same position as the sub-type
+ : of the value. Therefore the number of functions passed in as arguments must equal
+ : the number of sub-types of the value, and each function should have the same arity
+ : as its corresponding sub-type contains values.
+ :
+ : @param $v: A value, which must have been created by this library.
+ : @param $f1: A function, which is called with the values from the first sub-type of the type.
+ : @param $f2: A function, which is called with the values from the second sub-type of the type.
+ : @param $f3: A function, which is called with the values from the third sub-type of the type.
+ : @param $f4: A function, which is called with the values from the fourth sub-type of the type.
+ : @param $f5: A function, which is called with the values from the fifth sub-type of the type.
+ : @param $f6: A function, which is called with the values from the sixth sub-type of the type.
+ : @param $f7: A function, which is called with the values from the seventh sub-type of the type.
+ : 
+ : @return The result of the function called.
+ :)
 declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7)
 {
   $v(($f1,$f2,$f3,$f4,$f5,$f6,$f7))
 };
 
+(:~ 
+ : Performs structural pattern matching against the value. The pattern matching
+ : works by calling the function passed in in the same position as the sub-type
+ : of the value. Therefore the number of functions passed in as arguments must equal
+ : the number of sub-types of the value, and each function should have the same arity
+ : as its corresponding sub-type contains values.
+ :
+ : @param $v: A value, which must have been created by this library.
+ : @param $f1: A function, which is called with the values from the first sub-type of the type.
+ : @param $f2: A function, which is called with the values from the second sub-type of the type.
+ : @param $f3: A function, which is called with the values from the third sub-type of the type.
+ : @param $f4: A function, which is called with the values from the fourth sub-type of the type.
+ : @param $f5: A function, which is called with the values from the fifth sub-type of the type.
+ : @param $f6: A function, which is called with the values from the sixth sub-type of the type.
+ : @param $f7: A function, which is called with the values from the seventh sub-type of the type.
+ : @param $f8: A function, which is called with the values from the eighth sub-type of the type.
+ : 
+ : @return The result of the function called.
+ :)
 declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8)
 {
   $v(($f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8))
 };
 
+(:~ 
+ : Performs structural pattern matching against the value. The pattern matching
+ : works by calling the function passed in in the same position as the sub-type
+ : of the value. Therefore the number of functions passed in as arguments must equal
+ : the number of sub-types of the value, and each function should have the same arity
+ : as its corresponding sub-type contains values.
+ :
+ : @param $v: A value, which must have been created by this library.
+ : @param $f1: A function, which is called with the values from the first sub-type of the type.
+ : @param $f2: A function, which is called with the values from the second sub-type of the type.
+ : @param $f3: A function, which is called with the values from the third sub-type of the type.
+ : @param $f4: A function, which is called with the values from the fourth sub-type of the type.
+ : @param $f5: A function, which is called with the values from the fifth sub-type of the type.
+ : @param $f6: A function, which is called with the values from the sixth sub-type of the type.
+ : @param $f7: A function, which is called with the values from the seventh sub-type of the type.
+ : @param $f8: A function, which is called with the values from the eighth sub-type of the type.
+ : @param $f9: A function, which is called with the values from the ninth sub-type of the type.
+ : 
+ : @return The result of the function called.
+ :)
 declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8,$f9)
 {
   $v(($f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8,$f9))
 };
 
+(:~ 
+ : Performs structural pattern matching against the value. The pattern matching
+ : works by calling the function passed in in the same position as the sub-type
+ : of the value. Therefore the number of functions passed in as arguments must equal
+ : the number of sub-types of the value, and each function should have the same arity
+ : as its corresponding sub-type contains values.
+ :
+ : @param $v: A value, which must have been created by this library.
+ : @param $f1: A function, which is called with the values from the first sub-type of the type.
+ : @param $f2: A function, which is called with the values from the second sub-type of the type.
+ : @param $f3: A function, which is called with the values from the third sub-type of the type.
+ : @param $f4: A function, which is called with the values from the fourth sub-type of the type.
+ : @param $f5: A function, which is called with the values from the fifth sub-type of the type.
+ : @param $f6: A function, which is called with the values from the sixth sub-type of the type.
+ : @param $f7: A function, which is called with the values from the seventh sub-type of the type.
+ : @param $f8: A function, which is called with the values from the eighth sub-type of the type.
+ : @param $f9: A function, which is called with the values from the ninth sub-type of the type.
+ : @param $f10: A function, which is called with the values from the tenth sub-type of the type.
+ : 
+ : @return The result of the function called.
+ :)
 declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8,$f9,$f10)
 {
   $v(($f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8,$f9,$f10))
