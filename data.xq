@@ -31,6 +31,12 @@ declare function declare($decl)
     case 2 return construct($entry,$position,$total,?,?)
     case 3 return construct($entry,$position,$total,?,?,?)
     case 4 return construct($entry,$position,$total,?,?,?,?)
+    case 5 return construct($entry,$position,$total,?,?,?,?,?)
+    case 6 return construct($entry,$position,$total,?,?,?,?,?,?)
+    case 7 return construct($entry,$position,$total,?,?,?,?,?,?,?)
+    case 8 return construct($entry,$position,$total,?,?,?,?,?,?,?,?)
+    case 9 return construct($entry,$position,$total,?,?,?,?,?,?,?,?,?)
+    case 10 return construct($entry,$position,$total,?,?,?,?,?,?,?,?,?,?)
     default return fn:error(xs:QName("data:BIGARITY"),
       "Type constructor arity too large: " || fn:string($arity))
 };
@@ -117,6 +123,117 @@ declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4)
   }
 };
 
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5)
+{
+  type-check($entry,1,$v1),
+  type-check($entry,2,$v2),
+  type-check($entry,3,$v3),
+  type-check($entry,4,$v4),
+  type-check($entry,5,$v5),
+  function($functions) {
+    if(fn:empty($functions)) then $entry
+    else if(fn:count($functions) ne $total) then fn:error(xs:QName("data:BADCASES"),
+      "Wrong number of case functions, expecting: " || fn:string($total) ||
+      ", actual: " || fn:string(fn:count($functions)))
+    else $functions[$position]($v1,$v2,$v3,$v4,$v5)
+  }
+};
+
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6)
+{
+  type-check($entry,1,$v1),
+  type-check($entry,2,$v2),
+  type-check($entry,3,$v3),
+  type-check($entry,4,$v4),
+  type-check($entry,5,$v5),
+  type-check($entry,6,$v6),
+  function($functions) {
+    if(fn:empty($functions)) then $entry
+    else if(fn:count($functions) ne $total) then fn:error(xs:QName("data:BADCASES"),
+      "Wrong number of case functions, expecting: " || fn:string($total) ||
+      ", actual: " || fn:string(fn:count($functions)))
+    else $functions[$position]($v1,$v2,$v3,$v4,$v5,$v6)
+  }
+};
+
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7)
+{
+  type-check($entry,1,$v1),
+  type-check($entry,2,$v2),
+  type-check($entry,3,$v3),
+  type-check($entry,4,$v4),
+  type-check($entry,5,$v5),
+  type-check($entry,6,$v6),
+  type-check($entry,7,$v7),
+  function($functions) {
+    if(fn:empty($functions)) then $entry
+    else if(fn:count($functions) ne $total) then fn:error(xs:QName("data:BADCASES"),
+      "Wrong number of case functions, expecting: " || fn:string($total) ||
+      ", actual: " || fn:string(fn:count($functions)))
+    else $functions[$position]($v1,$v2,$v3,$v4,$v5,$v6,$v7)
+  }
+};
+
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8)
+{
+  type-check($entry,1,$v1),
+  type-check($entry,2,$v2),
+  type-check($entry,3,$v3),
+  type-check($entry,4,$v4),
+  type-check($entry,5,$v5),
+  type-check($entry,6,$v6),
+  type-check($entry,7,$v7),
+  type-check($entry,8,$v8),
+  function($functions) {
+    if(fn:empty($functions)) then $entry
+    else if(fn:count($functions) ne $total) then fn:error(xs:QName("data:BADCASES"),
+      "Wrong number of case functions, expecting: " || fn:string($total) ||
+      ", actual: " || fn:string(fn:count($functions)))
+    else $functions[$position]($v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8)
+  }
+};
+
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9)
+{
+  type-check($entry,1,$v1),
+  type-check($entry,2,$v2),
+  type-check($entry,3,$v3),
+  type-check($entry,4,$v4),
+  type-check($entry,5,$v5),
+  type-check($entry,6,$v6),
+  type-check($entry,7,$v7),
+  type-check($entry,8,$v8),
+  type-check($entry,9,$v9),
+  function($functions) {
+    if(fn:empty($functions)) then $entry
+    else if(fn:count($functions) ne $total) then fn:error(xs:QName("data:BADCASES"),
+      "Wrong number of case functions, expecting: " || fn:string($total) ||
+      ", actual: " || fn:string(fn:count($functions)))
+    else $functions[$position]($v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9)
+  }
+};
+
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9,$v10)
+{
+  type-check($entry,1,$v1),
+  type-check($entry,2,$v2),
+  type-check($entry,3,$v3),
+  type-check($entry,4,$v4),
+  type-check($entry,5,$v5),
+  type-check($entry,6,$v6),
+  type-check($entry,7,$v7),
+  type-check($entry,8,$v8),
+  type-check($entry,9,$v9),
+  type-check($entry,10,$v10),
+  function($functions) {
+    if(fn:empty($functions)) then $entry
+    else if(fn:count($functions) ne $total) then fn:error(xs:QName("data:BADCASES"),
+      "Wrong number of case functions, expecting: " || fn:string($total) ||
+      ", actual: " || fn:string(fn:count($functions)))
+    else $functions[$position]($v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9,$v10)
+  }
+};
+
 declare function type($v)
 {
   $v(())
@@ -151,10 +268,16 @@ declare %private function describe-data($indent,$v)
       "/" || fn:string(fn:node-name($entry)) ||
       (switch(fn:count($entry/*))
       case 0 return ""
-      case 1 return $v((1 to $total) ! describe-many($entry,$indent + 1,?))
+      case 1 return $v((1 to $total) ! describe-one($entry,$indent + 1,?))
       case 2 return $v((1 to $total) ! describe-many($entry,$indent + 1,?,?))
       case 3 return $v((1 to $total) ! describe-many($entry,$indent + 1,?,?,?))
       case 4 return $v((1 to $total) ! describe-many($entry,$indent + 1,?,?,?,?))
+      case 5 return $v((1 to $total) ! describe-many($entry,$indent + 1,?,?,?,?,?))
+      case 6 return $v((1 to $total) ! describe-many($entry,$indent + 1,?,?,?,?,?,?))
+      case 7 return $v((1 to $total) ! describe-many($entry,$indent + 1,?,?,?,?,?,?,?))
+      case 8 return $v((1 to $total) ! describe-many($entry,$indent + 1,?,?,?,?,?,?,?,?))
+      case 9 return $v((1 to $total) ! describe-many($entry,$indent + 1,?,?,?,?,?,?,?,?,?))
+      case 10 return $v((1 to $total) ! describe-many($entry,$indent + 1,?,?,?,?,?,?,?,?,?,?))
       default return fn:error(xs:QName("data:BIGARITY"),
         "Type constructor arity too large: " || fn:string(fn:count($entry/*))))
       || "]"
@@ -172,7 +295,7 @@ declare %private function describe-type($entry, $position, $indent, $v)
     default return describe-data($indent,$v)
 };
 
-declare %private function describe-many($entry, $indent, $v1)
+declare %private function describe-one($entry, $indent, $v1)
 {
   " " || describe-type($entry,1,$indent,$v1)
 };
@@ -198,6 +321,75 @@ declare %private function describe-many($entry, $indent, $v1, $v2, $v3, $v4)
   newline($indent) || describe-type($entry,4,$indent,$v4)
 };
 
+declare %private function describe-many($entry, $indent, $v1, $v2, $v3, $v4, $v5)
+{
+  newline($indent) || describe-type($entry,1,$indent,$v1) ||
+  newline($indent) || describe-type($entry,2,$indent,$v2) ||
+  newline($indent) || describe-type($entry,3,$indent,$v3) ||
+  newline($indent) || describe-type($entry,4,$indent,$v4) ||
+  newline($indent) || describe-type($entry,5,$indent,$v5)
+};
+
+declare %private function describe-many($entry, $indent, $v1, $v2, $v3, $v4, $v5, $v6)
+{
+  newline($indent) || describe-type($entry,1,$indent,$v1) ||
+  newline($indent) || describe-type($entry,2,$indent,$v2) ||
+  newline($indent) || describe-type($entry,3,$indent,$v3) ||
+  newline($indent) || describe-type($entry,4,$indent,$v4) ||
+  newline($indent) || describe-type($entry,5,$indent,$v5) ||
+  newline($indent) || describe-type($entry,6,$indent,$v6)
+};
+
+declare %private function describe-many($entry, $indent, $v1, $v2, $v3, $v4, $v5, $v6, $v7)
+{
+  newline($indent) || describe-type($entry,1,$indent,$v1) ||
+  newline($indent) || describe-type($entry,2,$indent,$v2) ||
+  newline($indent) || describe-type($entry,3,$indent,$v3) ||
+  newline($indent) || describe-type($entry,4,$indent,$v4) ||
+  newline($indent) || describe-type($entry,5,$indent,$v5) ||
+  newline($indent) || describe-type($entry,6,$indent,$v6) ||
+  newline($indent) || describe-type($entry,7,$indent,$v7)
+};
+
+declare %private function describe-many($entry, $indent, $v1, $v2, $v3, $v4, $v5, $v6, $v7, $v8)
+{
+  newline($indent) || describe-type($entry,1,$indent,$v1) ||
+  newline($indent) || describe-type($entry,2,$indent,$v2) ||
+  newline($indent) || describe-type($entry,3,$indent,$v3) ||
+  newline($indent) || describe-type($entry,4,$indent,$v4) ||
+  newline($indent) || describe-type($entry,5,$indent,$v5) ||
+  newline($indent) || describe-type($entry,6,$indent,$v6) ||
+  newline($indent) || describe-type($entry,7,$indent,$v7) ||
+  newline($indent) || describe-type($entry,8,$indent,$v8)
+};
+
+declare %private function describe-many($entry, $indent, $v1, $v2, $v3, $v4, $v5, $v6, $v7, $v8, $v9)
+{
+  newline($indent) || describe-type($entry,1,$indent,$v1) ||
+  newline($indent) || describe-type($entry,2,$indent,$v2) ||
+  newline($indent) || describe-type($entry,3,$indent,$v3) ||
+  newline($indent) || describe-type($entry,4,$indent,$v4) ||
+  newline($indent) || describe-type($entry,5,$indent,$v5) ||
+  newline($indent) || describe-type($entry,6,$indent,$v6) ||
+  newline($indent) || describe-type($entry,7,$indent,$v7) ||
+  newline($indent) || describe-type($entry,8,$indent,$v8) ||
+  newline($indent) || describe-type($entry,9,$indent,$v9)
+};
+
+declare %private function describe-many($entry, $indent, $v1, $v2, $v3, $v4, $v5, $v6, $v7, $v8, $v9, $v10)
+{
+  newline($indent) || describe-type($entry,1,$indent,$v1) ||
+  newline($indent) || describe-type($entry,2,$indent,$v2) ||
+  newline($indent) || describe-type($entry,3,$indent,$v3) ||
+  newline($indent) || describe-type($entry,4,$indent,$v4) ||
+  newline($indent) || describe-type($entry,5,$indent,$v5) ||
+  newline($indent) || describe-type($entry,6,$indent,$v6) ||
+  newline($indent) || describe-type($entry,7,$indent,$v7) ||
+  newline($indent) || describe-type($entry,8,$indent,$v8) ||
+  newline($indent) || describe-type($entry,9,$indent,$v9) ||
+  newline($indent) || describe-type($entry,10,$indent,$v10)
+};
+
 declare function match($v,$f1)
 {
   $v($f1)
@@ -218,3 +410,32 @@ declare function match($v,$f1,$f2,$f3,$f4)
   $v(($f1,$f2,$f3,$f4))
 };
 
+declare function match($v,$f1,$f2,$f3,$f4,$f5)
+{
+  $v(($f1,$f2,$f3,$f4,$f5))
+};
+
+declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6)
+{
+  $v(($f1,$f2,$f3,$f4,$f5,$f6))
+};
+
+declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7)
+{
+  $v(($f1,$f2,$f3,$f4,$f5,$f6,$f7))
+};
+
+declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8)
+{
+  $v(($f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8))
+};
+
+declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8,$f9)
+{
+  $v(($f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8,$f9))
+};
+
+declare function match($v,$f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8,$f9,$f10)
+{
+  $v(($f1,$f2,$f3,$f4,$f5,$f6,$f7,$f8,$f9,$f10))
+};
