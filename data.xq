@@ -69,24 +69,83 @@ declare default function namespace "http://snelson.org.uk/functions/data";
  :)
 declare function declare($decl as element()) as function(*)*
 {
+  declare($decl,fn:true())
+};
+
+(:~ 
+ : Returns a sequence of constructor functions for the XML type
+ : description passed in as an argument. One constructor function is
+ : returned for each of the sub-types described. The constructor functions
+ : can be called to construct an instance of the type, passing in the
+ : values required the specific sub-type being created.
+ :
+ : <p>An example of an XML description is:
+ : <code>
+ : &lt;Maybe>
+ :   &lt;Nothing/>
+ :   &lt;Just>&lt;data:Sequence/>&lt;/Just>
+ : &lt;/Maybe>
+ : </code>
+ : This defines a type named "Maybe", with two sub-types named "Nothing" and
+ : "Just". The "Nothing" constructor function takes no arguments, and store no
+ : additional data. The "Just" constructor function takes a single argument which
+ : is an arbitrary sequence. Passing this type description to this function will
+ : return two constructor functions, one for each sub-type.
+ : </p>
+ :
+ : <p>Another example of an XML description is:
+ : <code>
+ : &lt;Tree>
+ :   &lt;Empty/>
+ :   &lt;Leaf>&lt;data:Sequence/>&lt;/Leaf>
+ :   &lt;Node>&lt;Tree/>&lt;Tree/>&lt;/Node>
+ : &lt;/Tree>
+ : </code>
+ : This defines a type named "Tree", with three sub-types named "Empty",
+ : "Leaf", and "Node". The "Node" constructor function takes two arguments,
+ : each of which will be type checked as a "Tree" object during construction.
+ : </p>
+ :
+ : @param $decl: An XML description of an algebraic data type.
+ : @param $type-check: Setting this argument to false turns off type checking during
+ : value construction, which can speed up data structure creation.
+ : 
+ : @return A sequence of constructor functions for the given algebraic type description.
+ :)
+declare function declare($decl as element(),$type-check as xs:boolean) as function(*)*
+{
   let $total := fn:count($decl/*)
   for $entry at $position in $decl/*
   let $arity := fn:count($entry/*)
   return
-    switch($arity)
-    case 0 return function() { construct($entry,$position,$total) }
-    case 1 return construct($entry,$position,$total,?)
-    case 2 return construct($entry,$position,$total,?,?)
-    case 3 return construct($entry,$position,$total,?,?,?)
-    case 4 return construct($entry,$position,$total,?,?,?,?)
-    case 5 return construct($entry,$position,$total,?,?,?,?,?)
-    case 6 return construct($entry,$position,$total,?,?,?,?,?,?)
-    case 7 return construct($entry,$position,$total,?,?,?,?,?,?,?)
-    case 8 return construct($entry,$position,$total,?,?,?,?,?,?,?,?)
-    case 9 return construct($entry,$position,$total,?,?,?,?,?,?,?,?,?)
-    case 10 return construct($entry,$position,$total,?,?,?,?,?,?,?,?,?,?)
-    default return fn:error(xs:QName("data:BIGARITY"),
-      "Type constructor arity too large: " || fn:string($arity))
+    if($type-check) then switch($arity)
+      case 0 return function() { construct($entry,$position,$total) }
+      case 1 return constructd($entry,$position,$total,?)
+      case 2 return constructd($entry,$position,$total,?,?)
+      case 3 return constructd($entry,$position,$total,?,?,?)
+      case 4 return constructd($entry,$position,$total,?,?,?,?)
+      case 5 return constructd($entry,$position,$total,?,?,?,?,?)
+      case 6 return constructd($entry,$position,$total,?,?,?,?,?,?)
+      case 7 return constructd($entry,$position,$total,?,?,?,?,?,?,?)
+      case 8 return constructd($entry,$position,$total,?,?,?,?,?,?,?,?)
+      case 9 return constructd($entry,$position,$total,?,?,?,?,?,?,?,?,?)
+      case 10 return constructd($entry,$position,$total,?,?,?,?,?,?,?,?,?,?)
+      default return fn:error(xs:QName("data:BIGARITY"),
+        "Type constructor arity too large: " || fn:string($arity))
+    else switch($arity)
+      case 0 return function() { construct($entry,$position,$total) }
+      case 1 return construct($entry,$position,$total,?)
+      case 2 return construct($entry,$position,$total,?,?)
+      case 3 return construct($entry,$position,$total,?,?,?)
+      case 4 return construct($entry,$position,$total,?,?,?,?)
+      case 5 return construct($entry,$position,$total,?,?,?,?,?)
+      case 6 return construct($entry,$position,$total,?,?,?,?,?,?)
+      case 7 return construct($entry,$position,$total,?,?,?,?,?,?,?)
+      case 8 return construct($entry,$position,$total,?,?,?,?,?,?,?,?)
+      case 9 return construct($entry,$position,$total,?,?,?,?,?,?,?,?,?)
+      case 10 return construct($entry,$position,$total,?,?,?,?,?,?,?,?,?,?)
+      default return fn:error(xs:QName("data:BIGARITY"),
+        "Type constructor arity too large: " || fn:string($arity))
 };
 
 declare %private function type-check($entry,$position,$value)
@@ -119,7 +178,6 @@ declare %private function construct($entry,$position,$total) as item()
 
 declare %private function construct($entry,$position,$total,$v1) as item()
 {
-  type-check($entry,1,$v1),
   function($functions) {
     if(fn:empty($functions)) then $entry
     else if(fn:count($functions) ne $total) then fn:error(xs:QName("data:BADCASES"),
@@ -130,6 +188,117 @@ declare %private function construct($entry,$position,$total,$v1) as item()
 };
 
 declare %private function construct($entry,$position,$total,$v1,$v2) as item()
+{
+  function($functions) {
+    if(fn:empty($functions)) then $entry
+    else if(fn:count($functions) ne $total) then fn:error(xs:QName("data:BADCASES"),
+      "Wrong number of case functions, expecting: " || fn:string($total) ||
+      ", actual: " || fn:string(fn:count($functions)))
+    else $functions[$position]($v1,$v2)
+  }
+};
+
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3) as item()
+{
+  function($functions) {
+    if(fn:empty($functions)) then $entry
+    else if(fn:count($functions) ne $total) then fn:error(xs:QName("data:BADCASES"),
+      "Wrong number of case functions, expecting: " || fn:string($total) ||
+      ", actual: " || fn:string(fn:count($functions)))
+    else $functions[$position]($v1,$v2,$v3)
+  }
+};
+
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4) as item()
+{
+  function($functions) {
+    if(fn:empty($functions)) then $entry
+    else if(fn:count($functions) ne $total) then fn:error(xs:QName("data:BADCASES"),
+      "Wrong number of case functions, expecting: " || fn:string($total) ||
+      ", actual: " || fn:string(fn:count($functions)))
+    else $functions[$position]($v1,$v2,$v3,$v4)
+  }
+};
+
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5) as item()
+{
+  function($functions) {
+    if(fn:empty($functions)) then $entry
+    else if(fn:count($functions) ne $total) then fn:error(xs:QName("data:BADCASES"),
+      "Wrong number of case functions, expecting: " || fn:string($total) ||
+      ", actual: " || fn:string(fn:count($functions)))
+    else $functions[$position]($v1,$v2,$v3,$v4,$v5)
+  }
+};
+
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6) as item()
+{
+  function($functions) {
+    if(fn:empty($functions)) then $entry
+    else if(fn:count($functions) ne $total) then fn:error(xs:QName("data:BADCASES"),
+      "Wrong number of case functions, expecting: " || fn:string($total) ||
+      ", actual: " || fn:string(fn:count($functions)))
+    else $functions[$position]($v1,$v2,$v3,$v4,$v5,$v6)
+  }
+};
+
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7) as item()
+{
+  function($functions) {
+    if(fn:empty($functions)) then $entry
+    else if(fn:count($functions) ne $total) then fn:error(xs:QName("data:BADCASES"),
+      "Wrong number of case functions, expecting: " || fn:string($total) ||
+      ", actual: " || fn:string(fn:count($functions)))
+    else $functions[$position]($v1,$v2,$v3,$v4,$v5,$v6,$v7)
+  }
+};
+
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8) as item()
+{
+  function($functions) {
+    if(fn:empty($functions)) then $entry
+    else if(fn:count($functions) ne $total) then fn:error(xs:QName("data:BADCASES"),
+      "Wrong number of case functions, expecting: " || fn:string($total) ||
+      ", actual: " || fn:string(fn:count($functions)))
+    else $functions[$position]($v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8)
+  }
+};
+
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9) as item()
+{
+  function($functions) {
+    if(fn:empty($functions)) then $entry
+    else if(fn:count($functions) ne $total) then fn:error(xs:QName("data:BADCASES"),
+      "Wrong number of case functions, expecting: " || fn:string($total) ||
+      ", actual: " || fn:string(fn:count($functions)))
+    else $functions[$position]($v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9)
+  }
+};
+
+declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9,$v10) as item()
+{
+  function($functions) {
+    if(fn:empty($functions)) then $entry
+    else if(fn:count($functions) ne $total) then fn:error(xs:QName("data:BADCASES"),
+      "Wrong number of case functions, expecting: " || fn:string($total) ||
+      ", actual: " || fn:string(fn:count($functions)))
+    else $functions[$position]($v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9,$v10)
+  }
+};
+
+declare %private function constructd($entry,$position,$total,$v1) as item()
+{
+  type-check($entry,1,$v1),
+  function($functions) {
+    if(fn:empty($functions)) then $entry
+    else if(fn:count($functions) ne $total) then fn:error(xs:QName("data:BADCASES"),
+      "Wrong number of case functions, expecting: " || fn:string($total) ||
+      ", actual: " || fn:string(fn:count($functions)))
+    else $functions[$position]($v1)
+  }
+};
+
+declare %private function constructd($entry,$position,$total,$v1,$v2) as item()
 {
   type-check($entry,1,$v1),
   type-check($entry,2,$v2),
@@ -142,7 +311,7 @@ declare %private function construct($entry,$position,$total,$v1,$v2) as item()
   }
 };
 
-declare %private function construct($entry,$position,$total,$v1,$v2,$v3) as item()
+declare %private function constructd($entry,$position,$total,$v1,$v2,$v3) as item()
 {
   type-check($entry,1,$v1),
   type-check($entry,2,$v2),
@@ -156,7 +325,7 @@ declare %private function construct($entry,$position,$total,$v1,$v2,$v3) as item
   }
 };
 
-declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4) as item()
+declare %private function constructd($entry,$position,$total,$v1,$v2,$v3,$v4) as item()
 {
   type-check($entry,1,$v1),
   type-check($entry,2,$v2),
@@ -171,7 +340,7 @@ declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4) as 
   }
 };
 
-declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5) as item()
+declare %private function constructd($entry,$position,$total,$v1,$v2,$v3,$v4,$v5) as item()
 {
   type-check($entry,1,$v1),
   type-check($entry,2,$v2),
@@ -187,7 +356,7 @@ declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5)
   }
 };
 
-declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6) as item()
+declare %private function constructd($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6) as item()
 {
   type-check($entry,1,$v1),
   type-check($entry,2,$v2),
@@ -204,7 +373,7 @@ declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,
   }
 };
 
-declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7) as item()
+declare %private function constructd($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7) as item()
 {
   type-check($entry,1,$v1),
   type-check($entry,2,$v2),
@@ -222,7 +391,7 @@ declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,
   }
 };
 
-declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8) as item()
+declare %private function constructd($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8) as item()
 {
   type-check($entry,1,$v1),
   type-check($entry,2,$v2),
@@ -241,7 +410,7 @@ declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,
   }
 };
 
-declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9) as item()
+declare %private function constructd($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9) as item()
 {
   type-check($entry,1,$v1),
   type-check($entry,2,$v2),
@@ -261,7 +430,7 @@ declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,
   }
 };
 
-declare %private function construct($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9,$v10) as item()
+declare %private function constructd($entry,$position,$total,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9,$v10) as item()
 {
   type-check($entry,1,$v1),
   type-check($entry,2,$v2),
