@@ -20,7 +20,7 @@ Version:  0.1
 
 ## Table of Contents
 
-* Functions: [declare\#1](#func_declare_1), [type\#1](#func_type_1), [describe\#1](#func_describe_1), [match\#2](#func_match_2), [match\#3](#func_match_3), [match\#4](#func_match_4), [match\#5](#func_match_5), [match\#6](#func_match_6), [match\#7](#func_match_7), [match\#8](#func_match_8), [match\#9](#func_match_9), [match\#10](#func_match_10), [match\#11](#func_match_11)
+* Functions: [declare\#1](#func_declare_1), [declare\#2](#func_declare_2), [type\#1](#func_type_1), [describe\#1](#func_describe_1), [match\#2](#func_match_2), [match\#3](#func_match_3), [match\#4](#func_match_4), [match\#5](#func_match_5), [match\#6](#func_match_6), [match\#7](#func_match_7), [match\#8](#func_match_8), [match\#9](#func_match_9), [match\#10](#func_match_10), [match\#11](#func_match_11)
 
 
 ## Functions
@@ -86,6 +86,74 @@ Another example of an XML description is:
 #### Params
 
 * $decl as  element(): An XML description of an algebraic data type.
+
+
+#### Returns
+*  function(\*)\*: A sequence of constructor functions for the given algebraic type description.
+
+### <a name="func_declare_2"/> declare\#2
+```xquery
+declare($decl as element(),$type-check as xs:boolean
+) as  function(*)*
+```
+ 
+ Returns a sequence of constructor functions for the XML type
+ description passed in as an argument. One constructor function is
+ returned for each of the sub-types described. The constructor functions
+ can be called to construct an instance of the type, passing in the
+ values required the specific sub-type being created.
+
+ 
+
+An example of an XML description is:
+ 
+
+```xquery
+
+ <Maybe>
+   <Nothing/>
+   <Just><data:Sequence/></Just>
+ </Maybe>
+ 
+```
+
+ This defines a type named "Maybe", with two sub-types named "Nothing" and
+ "Just". The "Nothing" constructor function takes no arguments, and store no
+ additional data. The "Just" constructor function takes a single argument which
+ is an arbitrary sequence. Passing this type description to this function will
+ return two constructor functions, one for each sub-type.
+ 
+
+
+ 
+
+Another example of an XML description is:
+ 
+
+```xquery
+
+ <Tree>
+   <Empty/>
+   <Leaf><data:Sequence/></Leaf>
+   <Node><Tree/><Tree/></Node>
+ </Tree>
+ 
+```
+
+ This defines a type named "Tree", with three sub-types named "Empty",
+ "Leaf", and "Node". The "Node" constructor function takes two arguments,
+ each of which will be type checked as a "Tree" object during construction.
+ 
+
+
+ 
+
+
+#### Params
+
+* $decl as  element(): An XML description of an algebraic data type.
+
+* $type-check as  xs:boolean: Setting this argument to false turns off type checking during value construction, which can speed up data structure creation.
 
 
 #### Returns
