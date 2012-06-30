@@ -530,7 +530,7 @@ declare %private function describe-type($entry, $position, $indent, $v)
 
 declare %private function describe-one($entry, $indent, $v1)
 {
-  " " || describe-type($entry,1,$indent,$v1)
+  " " || describe-type($entry,1,$indent - 1,$v1)
 };
 
 declare %private function describe-many($entry, $indent, $v1, $v2)
